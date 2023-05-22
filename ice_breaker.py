@@ -1,5 +1,5 @@
 from langchain import PromptTemplate
-from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAI
 from langchain.chains import LLMChain
 
 from agents.linkedin_lookup_agent import lookup as linkedin_lookup_agent
@@ -30,8 +30,12 @@ if __name__ == "__main__":
         template=summary_template,
     )
 
-    llm = ChatOpenAI(temperature=1, model_name="gpt-3.5-turbo")
+    llm = OpenAI(temperature=1, model_name="gpt-3.5-turbo")
 
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
-    print(chain.run(linkedin_information=linkedin_data, twitter_information=tweets))
+    print(chain.run({
+        "linkedin_information": linkedin_data,
+        "twitter_information": tweets
+    }))
+    # print(chain.run(linkedin_information=linkedin_data, twitter_information=tweets))
